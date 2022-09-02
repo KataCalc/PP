@@ -22,11 +22,11 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-//            try {
-//                connection.rollback();
-//            } catch (SQLException ex) {
-//                throw new RuntimeException(ex);
-//            }
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -71,7 +71,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     }
 
-    public List<User> getAllUsers() throws SQLException {//достать всех пользователей из базы данных
+    public List<User> getAllUsers()  {        //достать всех пользователей из базы данных
         List<User> userList = new ArrayList<>();
         String sql = "SELECT FIRSTNAME,LASTNAME, AGE FROM LUSER";
         Statement statement = null;
@@ -84,7 +84,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
                 user1.setLastName(resultSet.getString("LASTNAME"));
                 user1.setAge(resultSet.getByte("AGE"));
                 userList.add(user1);
-
             }
             connection.commit();
         } catch (SQLException e) {
