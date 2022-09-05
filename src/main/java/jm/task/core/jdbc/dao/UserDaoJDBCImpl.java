@@ -12,7 +12,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     }
 
-    Connection connection = getConnection();
+  private final   Connection connection = getConnection();
 
 
     public void createUsersTable() {   //сoздать таблицу узеров +++++
@@ -37,6 +37,11 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -52,8 +57,8 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             preparedStatement.execute();
             connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
             connection.rollback();
+            e.printStackTrace();
         }
 
     }
@@ -66,6 +71,11 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             statement.executeUpdate("DELETE FROM LUSER WHERE ID = id");
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
 
@@ -85,7 +95,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
                 user1.setAge(resultSet.getByte("AGE"));
                 userList.add(user1);
             }
-            connection.commit();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,6 +108,11 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             statement.executeUpdate(sql);
             connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             e.printStackTrace();
         }
     }
