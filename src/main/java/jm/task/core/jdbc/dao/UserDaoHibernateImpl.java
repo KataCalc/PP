@@ -18,7 +18,6 @@ public class UserDaoHibernateImpl implements UserDao {
     private final String sqlDrop = "DROP TABLE IF EXISTS dbluser";
     private final String sqlClean = "TRUNCATE TABLE dbluser";
 
- //   private final  String sqlsu = "FROM dbluser";
 
     public UserDaoHibernateImpl() {
 
@@ -30,8 +29,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Query query = session.createSQLQuery(sqlCreate).addEntity(User.class);
-            query.executeUpdate();
+            session.createSQLQuery(sqlCreate).addEntity(User.class).executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -46,8 +44,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Query query = session.createSQLQuery(sqlDrop).addEntity(User.class);
-            query.executeUpdate();
+            session.createSQLQuery(sqlDrop).addEntity(User.class).executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -90,16 +87,10 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Transaction transaction = null;
         List<User> userList = new ArrayList<>();
         try (Session session = getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-             userList = session.createQuery("from User ").getResultList();
-            transaction.commit();
+            userList = session.createQuery("from User ").getResultList();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
         }
         return userList;
